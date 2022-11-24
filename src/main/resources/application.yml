@@ -1,0 +1,19 @@
+server:
+  port: 8090
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/todowebflux
+    username: root
+    password: root
+  flyway:
+    url: jdbc:postgresql://localhost:5432/todowebflux
+    username: root
+    password: root
+  http:
+    encoding:
+      enabled: true
+      force: true
+      charset: UTF-8
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT-3
