@@ -9,9 +9,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Table("tb_todo")
 @Data
@@ -20,7 +18,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @ToString
 @Builder
-public class Todo implements Serializable {
+public class Todo {
     @Id
     @Column("id")
     private Integer id;
