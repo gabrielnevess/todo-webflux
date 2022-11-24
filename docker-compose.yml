@@ -1,7 +1,7 @@
 version: '3.0'
 
 services:
-  db:
+  database:
     image: postgres
     environment:
       POSTGRES_USER: root
