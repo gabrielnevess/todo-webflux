@@ -18,7 +18,7 @@ public class GlobalErrorAttributes extends DefaultErrorAttributes {
         Throwable throwable = getError(request);
         if (throwable instanceof ResponseStatusException) {
             ResponseStatusException ex = (ResponseStatusException) throwable;
-            errorAttributesMap.put("message", Optional.ofNullable(ex.getReason()));
+            errorAttributesMap.put("message", Optional.ofNullable(ex.getReason()).orElse(ex.getMessage()));
             return errorAttributesMap;
         }
         return errorAttributesMap;

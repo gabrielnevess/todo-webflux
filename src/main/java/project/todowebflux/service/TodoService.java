@@ -22,8 +22,7 @@ public class TodoService {
 
     public Mono<Todo> findById(Integer id) {
         return todoRepository.findById(id)
-                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found")))
-                .log();
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Todo not found with id %d", id))));
     }
 
 }
