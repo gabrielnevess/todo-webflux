@@ -24,8 +24,15 @@ public class TodoController {
     }
 
     @GetMapping(value = "/todo/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public Mono<Todo> findById(@PathVariable(value = "id") Integer id) {
         return todoService.findById(id);
+    }
+
+    @PutMapping(value = "/todo")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<Todo> update(@Valid @RequestBody Todo todo) {
+        return todoService.update(todo);
     }
 
 }
