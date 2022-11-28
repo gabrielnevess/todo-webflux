@@ -27,6 +27,8 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.springframework.boot:spring-boot-devtools'
     compileOnly 'io.projectreactor.tools:blockhound:1.0.6.RELEASE'
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'org.postgresql:r2dbc-postgresql'
     annotationProcessor 'org.projectlombok:lombok'

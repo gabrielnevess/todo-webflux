@@ -7,20 +7,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import project.todowebflux.domain.Todo;
+import project.todowebflux.domain.dto.TodoDTO;
+import project.todowebflux.domain.mapper.TodoMapper;
 import project.todowebflux.repository.TodoRepository;
 import reactor.core.publisher.Mono;
-
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class TodoService {
+
+    private final TodoMapper mapper;
     private final TodoRepository todoRepository;
 
-    public Mono<Todo> save(Todo todo) {
-        return this.todoRepository.save(todo);
+    public Mono<Todo> save(TodoDTO todoDTO) {
+        return this.todoRepository.save(mapper.toDomain(todoDTO));
     }
 
     public Mono<Todo> findById(Integer id) {
@@ -36,6 +37,12 @@ public class TodoService {
                     return t;
                 })
                 .flatMap(todoRepository::save);
+    }
+
+    public Mono<Void> delete(Integer id) {
+        return this.findById(id)
+                .flatMap(this.todoRepository::delete)
+                .then();
     }
 
 }
