@@ -7,7 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 class TodoWebfluxApplicationTests {
 
 	@Test
-	void contextLoads() {
+	public void main() {
+		TodoWebfluxApplication.main(new String[] {});
 	}
 
 }

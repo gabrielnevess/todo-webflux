@@ -4,9 +4,23 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
+
 group = 'project'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+
+allprojects {
+    apply plugin: 'jacoco'
+
+    jacoco {
+        toolVersion = "0.8.5"
+        reportsDirectory = file("$buildDir/jacoco")
+    }
+
+}
+
+// exclude these files from the coverage report
+def excludePattern = ['**/*Config*'];
 
 configurations {
     compileOnly {
@@ -16,6 +30,33 @@ configurations {
 
 repositories {
     mavenCentral()
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    apply plugin: 'io.spring.dependency-management'
+
+    test.finalizedBy jacocoTestReport
+
+    jacocoTestCoverageVerification {
+        getSourceDirectories().from(files(sourceSets.getByName("main").allSource.srcDirs))
+        afterEvaluate {
+            getClassDirectories().setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: excludePattern)
+            }))
+        }
+
+        violationRules {
+            rule {
+                limit {
+                    minimum = 0.8
+                }
+            }
+        }
+    }
+    check.dependsOn jacocoTestCoverageVerification
+
 }
 
 dependencies {
@@ -39,4 +80,32 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+
+    reports.html.destination = file("${reporting.baseDir}/${name}")
+
+    testLogging {
+        // Show that tests are run in the command-line output
+        events 'passed'
+    }
 }
+
+task coverageReport(type: JacocoReport) {
+    dependsOn = subprojects.test
+    additionalSourceDirs.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories.setFrom files(subprojects.sourceSets.main.output)
+    executionData.setFrom project.fileTree(dir: '.', include: '**/build/jacoco/test.exec')
+    afterEvaluate {
+        getClassDirectories().setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: excludePattern)
+        }))
+    }
+    reports {
+        xml.required = true
+        xml.destination file("${buildDir}/reports/jacoco.xml")
+        html.required = true
+        html.destination file("${buildDir}/reports/html")
+        csv.required = false
+    }
+}
+
